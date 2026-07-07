@@ -96,15 +96,15 @@ include 'header.php';
                         <td><?php echo $inst['instructor_id']; ?></td>
                         <td>
                             <div style="font-weight: 600;"><?php echo htmlspecialchars($inst['instructor_name']); ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">DOB: <?php echo $inst['instructor_dob'] ? date('M d, Y', strtotime($inst['instructor_dob'])) : 'N/A'; ?></div>
+                            <div style="font-size: 0.82rem; color: var(--text-secondary);">DOB: <?php echo $inst['instructor_dob'] ? date('M d, Y', strtotime($inst['instructor_dob'])) : 'N/A'; ?></div>
                         </td>
                         <td>
-                            <div><i class="fa-solid fa-phone" style="font-size: 0.75rem; color: var(--text-muted);"></i> <?php echo htmlspecialchars($inst['telephone']); ?></div>
-                            <div style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-envelope" style="font-size: 0.75rem; color: var(--text-muted);"></i> <?php echo htmlspecialchars($inst['email']); ?></div>
+                            <div><i class="fa-solid fa-phone" style="font-size: 0.8rem; color: var(--text-muted);"></i> <?php echo htmlspecialchars($inst['telephone']); ?></div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);"><i class="fa-solid fa-envelope" style="font-size: 0.8rem; color: var(--text-muted);"></i> <?php echo htmlspecialchars($inst['email']); ?></div>
                         </td>
                         <td>
                             <span class="badge badge-info"><?php echo htmlspecialchars($inst['license_type']); ?></span>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">No: <?php echo htmlspecialchars($inst['license_number']); ?></div>
+                            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">No: <?php echo htmlspecialchars($inst['license_number']); ?></div>
                         </td>
                         <td><code><?php echo htmlspecialchars($inst['national_id']); ?></code></td>
                         <td>

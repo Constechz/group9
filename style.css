@@ -7,8 +7,8 @@
     --sidebar-bg: #0b1329;
     --sidebar-hover: #1e293b;
     --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-muted: #94a3b8;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
     --primary: #4f46e5;
     --primary-hover: #4338ca;
     --primary-light: #e0e7ff;
@@ -19,7 +19,7 @@
     --warning-light: #fef3c7;
     --danger: #ef4444;
     --danger-light: #fee2e2;
-    --border-color: #e2e8f0;
+    --border-color: #cbd5e1;
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
@@ -409,7 +409,7 @@ body {
     gap: 8px;
     padding: 10px 20px;
     border-radius: var(--radius-md);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 700;
     cursor: pointer;
     border: none;
@@ -487,7 +487,7 @@ body {
     padding: 10px 16px 10px 40px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     width: 250px;
     transition: var(--transition);
     background-color: #f8fafc;
@@ -518,17 +518,17 @@ body {
 .custom-table th {
     background-color: #fafbfd;
     padding: 16px 24px;
-    font-size: 0.75rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    color: #475569;
+    color: #334155;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .custom-table td {
-    padding: 16px 24px;
-    font-size: 0.88rem;
+    padding: 18px 24px;
+    font-size: 0.92rem;
     border-bottom: 1px solid #f1f5f9;
     color: var(--text-primary);
 }
@@ -538,7 +538,7 @@ body {
 }
 
 .custom-table tbody tr:hover {
-    background-color: #fafbfd;
+    background-color: rgba(79, 70, 229, 0.035);
 }
 
 .status-dot {
@@ -559,7 +559,7 @@ body {
     align-items: center;
     padding: 4px 8px;
     border-radius: 9999px;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 600;
 }
 
@@ -590,7 +590,7 @@ body {
 
 .form-label {
     display: block;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 6px;
     color: var(--text-primary);
@@ -601,7 +601,7 @@ body {
     padding: 10px 16px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     background-color: var(--bg-secondary);
     transition: var(--transition);
 }

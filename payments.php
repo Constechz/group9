@@ -298,14 +298,14 @@ include 'header.php';
                         <td><code>#PAY-<?php echo $pay['payment_id']; ?></code></td>
                         <td>
                             <div style="font-weight: 600;"><?php echo htmlspecialchars($pay['first_name'] . ' ' . $pay['surname']); ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);"><?php echo htmlspecialchars($pay['telephone']); ?></div>
+                            <div style="font-size: 0.82rem; color: var(--text-secondary);"><?php echo htmlspecialchars($pay['telephone']); ?></div>
                         </td>
                         <td><?php echo htmlspecialchars($pay['course_name']); ?></td>
                         <td style="font-weight: 700; color: var(--success);">GH¢<?php echo number_format($pay['amount'], 2); ?></td>
                         <td style="font-weight: 600; color: var(--text-secondary);">GH¢<?php echo number_format($pay['balance_after_payment'], 2); ?></td>
                         <td>
                             <div><?php echo date('M d, Y', strtotime($pay['payment_date'])); ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);"><?php echo htmlspecialchars($pay['payment_type']); ?></div>
+                            <div style="font-size: 0.82rem; color: var(--text-secondary);"><?php echo htmlspecialchars($pay['payment_type']); ?></div>
                         </td>
                         <td>
                             <a href="payments.php?receipt=<?php echo $pay['payment_id']; ?>" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.8rem;" title="View Receipt">

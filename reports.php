@@ -236,7 +236,7 @@ include 'header.php';
                         <tr>
                             <td>
                                 <div style="font-weight: 600;"><?php echo date('M d, Y', strtotime($row['lesson_date'])); ?></div>
-                                <div style="font-size: 0.75rem; color: var(--text-secondary);"><?php echo date('h:i A', strtotime($row['start_time'])) . ' - ' . date('h:i A', strtotime($row['end_time'])); ?></div>
+                                <div style="font-size: 0.82rem; color: var(--text-secondary);"><?php echo date('h:i A', strtotime($row['start_time'])) . ' - ' . date('h:i A', strtotime($row['end_time'])); ?></div>
                             </td>
                             <td><?php echo htmlspecialchars($row['first_name'] . ' ' . $row['surname']); ?></td>
                             <td><?php echo htmlspecialchars($row['instructor_name']); ?></td>
@@ -343,7 +343,7 @@ include 'header.php';
                             <tr>
                                 <td>
                                     <div><?php echo date('M d, Y', strtotime($row['lesson_date'])); ?></div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);"><?php echo date('h:i A', strtotime($row['start_time'])) . ' - ' . date('h:i A', strtotime($row['end_time'])); ?></div>
+                                    <div style="font-size: 0.82rem; color: var(--text-secondary);"><?php echo date('h:i A', strtotime($row['start_time'])) . ' - ' . date('h:i A', strtotime($row['end_time'])); ?></div>
                                 </td>
                                 <td style="font-weight: 600;"><?php echo htmlspecialchars($row['first_name'] . ' ' . $row['surname']); ?></td>
                                 <td><?php echo htmlspecialchars($row['instructor_name']); ?></td>

@@ -132,23 +132,23 @@ include 'header.php';
                         <td><code>#REG-<?php echo $reg['registration_id']; ?></code></td>
                         <td>
                             <div style="font-weight: 600;"><?php echo htmlspecialchars($reg['first_name'] . ' ' . $reg['surname']); ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);"><?php echo htmlspecialchars($reg['telephone']); ?></div>
+                            <div style="font-size: 0.82rem; color: var(--text-secondary);"><?php echo htmlspecialchars($reg['telephone']); ?></div>
                         </td>
                         <td>
                             <div style="font-weight: 500;"><?php echo htmlspecialchars($reg['course_name']); ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Approved by: <?php echo htmlspecialchars($reg['manager_name']); ?> on <?php echo date('M d, Y', strtotime($reg['registration_date'])); ?></div>
+                            <div style="font-size: 0.82rem; color: var(--text-secondary);">Approved by: <?php echo htmlspecialchars($reg['manager_name']); ?> on <?php echo date('M d, Y', strtotime($reg['registration_date'])); ?></div>
                         </td>
                         <td>
                             <div>Total: <strong>GH¢<?php echo number_format($reg['total_cost'], 2); ?></strong></div>
-                            <div style="font-size: 0.8rem; color: var(--text-secondary);">Paid: GH¢<?php echo number_format($reg['total_cost'] - $reg['balance'], 2); ?></div>
-                            <div style="font-size: 0.8rem; color: <?php echo ($reg['balance'] > 0) ? 'var(--warning)' : 'var(--success)'; ?>; font-weight: 700;">Balance: GH¢<?php echo number_format($reg['balance'], 2); ?></div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Paid: GH¢<?php echo number_format($reg['total_cost'] - $reg['balance'], 2); ?></div>
+                            <div style="font-size: 0.85rem; color: <?php echo ($reg['balance'] > 0) ? 'var(--warning)' : 'var(--success)'; ?>; font-weight: 700;">Balance: GH¢<?php echo number_format($reg['balance'], 2); ?></div>
                         </td>
                         <td>
                             <?php if ($reg['commencement_date']): ?>
                                 <div style="font-size: 0.85rem;"><span class="badge badge-success">Commenced</span></div>
-                                <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">Start: <?php echo date('M d, Y', strtotime($reg['commencement_date'])); ?></div>
+                                <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Start: <?php echo date('M d, Y', strtotime($reg['commencement_date'])); ?></div>
                                 <?php if ($reg['completion_date']): ?>
-                                    <div style="font-size: 0.75rem; color: var(--success); margin-top: 2px; font-weight: 600;">Ended: <?php echo date('M d, Y', strtotime($reg['completion_date'])); ?></div>
+                                    <div style="font-size: 0.82rem; color: var(--success); margin-top: 2px; font-weight: 600;">Ended: <?php echo date('M d, Y', strtotime($reg['completion_date'])); ?></div>
                                 <?php endif; ?>
                             <?php else: ?>
                                 <span class="badge badge-warning">Pending Commencement</span>

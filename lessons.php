@@ -203,11 +203,11 @@ include 'header.php';
                         <td><code>#LES-<?php echo $l['lesson_id']; ?></code></td>
                         <td>
                             <div style="font-weight: 600;"><?php echo htmlspecialchars($l['first_name'] . ' ' . $l['surname']); ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);"><?php echo htmlspecialchars($l['telephone']); ?></div>
+                            <div style="font-size: 0.82rem; color: var(--text-secondary);"><?php echo htmlspecialchars($l['telephone']); ?></div>
                         </td>
                         <td>
-                            <div><i class="fa-solid fa-user-tie" style="font-size: 0.75rem; color: var(--text-muted);"></i> <?php echo htmlspecialchars($l['instructor_name']); ?></div>
-                            <div style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-car" style="font-size: 0.75rem; color: var(--text-muted);"></i> <?php echo htmlspecialchars($l['vehicle_registration_no'] . ' (' . $l['vehicle_type'] . ')'); ?></div>
+                            <div><i class="fa-solid fa-user-tie" style="font-size: 0.8rem; color: var(--text-muted);"></i> <?php echo htmlspecialchars($l['instructor_name']); ?></div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);"><i class="fa-solid fa-car" style="font-size: 0.8rem; color: var(--text-muted);"></i> <?php echo htmlspecialchars($l['vehicle_registration_no'] . ' (' . $l['vehicle_type'] . ')'); ?></div>
                         </td>
                         <td>
                             <div style="font-weight: 500;"><?php echo date('M d, Y', strtotime($l['lesson_date'])); ?></div>
