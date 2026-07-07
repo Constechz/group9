@@ -45,30 +45,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         }
 
         // 1. Check Instructor Scheduling Conflict
-        $stmt_inst = $pdo->prepare("SELECT COUNT(*) FROM lessons WHERE instructor_id = ? AND " . $overlap_cond);
+        $stmt_inst = $pdo->prepare("SELECT COUNT(*) FROM lesson WHERE instructor_id = ? AND " . $overlap_cond);
         $inst_params = array_merge([$instructor_id], $params_check);
         $stmt_inst->execute($inst_params);
         if ($stmt_inst->fetchColumn() > 0) {
             // Fetch name for error
-            $stmt_name = $pdo->prepare("SELECT instructor_name FROM instructors WHERE instructor_id = ?");
+            $stmt_name = $pdo->prepare("SELECT instructor_name FROM instructor WHERE instructor_id = ?");
             $stmt_name->execute([$instructor_id]);
             $inst_name = $stmt_name->fetchColumn();
             throw new Exception("Conflict! Instructor <strong>$inst_name</strong> is already assigned to a lesson during this time frame.");
         }
 
         // 2. Check Vehicle Scheduling Conflict
-        $stmt_veh = $pdo->prepare("SELECT COUNT(*) FROM lessons WHERE vehicle_id = ? AND " . $overlap_cond);
+        $stmt_veh = $pdo->prepare("SELECT COUNT(*) FROM lesson WHERE vehicle_id = ? AND " . $overlap_cond);
         $veh_params = array_merge([$vehicle_id], $params_check);
         $stmt_veh->execute($veh_params);
         if ($stmt_veh->fetchColumn() > 0) {
-            $stmt_no = $pdo->prepare("SELECT vehicle_registration_no FROM vehicles WHERE vehicle_id = ?");
+            $stmt_no = $pdo->prepare("SELECT vehicle_registration_no FROM vehicle WHERE vehicle_id = ?");
             $stmt_no->execute([$vehicle_id]);
             $reg_no = $stmt_no->fetchColumn();
             throw new Exception("Conflict! Vehicle <strong>$reg_no</strong> is already booked for another lesson during this time frame.");
         }
 
         // 3. Check Student Scheduling Conflict
-        $stmt_stud = $pdo->prepare("SELECT COUNT(*) FROM lessons WHERE registration_id = ? AND " . $overlap_cond);
+        $stmt_stud = $pdo->prepare("SELECT COUNT(*) FROM lesson WHERE registration_id = ? AND " . $overlap_cond);
         $stud_params = array_merge([$registration_id], $params_check);
         $stmt_stud->execute($stud_params);
         if ($stmt_stud->fetchColumn() > 0) {
@@ -77,11 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
         // If no conflicts, proceed with save
         if ($lesson_id) {
-            $stmt_save = $pdo->prepare("UPDATE lessons SET registration_id=?, instructor_id=?, vehicle_id=?, lesson_type=?, lesson_date=?, start_time=?, end_time=?, status=? WHERE lesson_id=?");
+            $stmt_save = $pdo->prepare("UPDATE lesson SET registration_id=?, instructor_id=?, vehicle_id=?, lesson_type=?, lesson_date=?, start_time=?, end_time=?, status=? WHERE lesson_id=?");
             $stmt_save->execute([$registration_id, $instructor_id, $vehicle_id, $lesson_type, $lesson_date, $start_time, $end_time, $status, $lesson_id]);
             $message = "Lesson details updated successfully!";
         } else {
-            $stmt_save = $pdo->prepare("INSERT INTO lessons (registration_id, instructor_id, vehicle_id, lesson_type, lesson_date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt_save = $pdo->prepare("INSERT INTO lesson (registration_id, instructor_id, vehicle_id, lesson_type, lesson_date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt_save->execute([$registration_id, $instructor_id, $vehicle_id, $lesson_type, $lesson_date, $start_time, $end_time, $status]);
             $message = "New driving lesson scheduled successfully!";
         }
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 if (isset($_GET['cancel'])) {
     $cancel_id = intval($_GET['cancel']);
     try {
-        $stmt = $pdo->prepare("UPDATE lessons SET status='Cancelled' WHERE lesson_id=?");
+        $stmt = $pdo->prepare("UPDATE lesson SET status='Cancelled' WHERE lesson_id=?");
         $stmt->execute([$cancel_id]);
         $message = "Lesson cancelled successfully.";
     } catch (Exception $e) {
@@ -109,7 +109,7 @@ if (isset($_GET['cancel'])) {
 if (isset($_GET['complete'])) {
     $complete_id = intval($_GET['complete']);
     try {
-        $stmt = $pdo->prepare("UPDATE lessons SET status='Completed' WHERE lesson_id=?");
+        $stmt = $pdo->prepare("UPDATE lesson SET status='Completed' WHERE lesson_id=?");
         $stmt->execute([$complete_id]);
         $message = "Lesson marked as Completed.";
     } catch (Exception $e) {
@@ -123,11 +123,11 @@ $lessons = [];
 try {
     $stmt = $pdo->query("
         SELECT l.*, s.first_name, s.surname, s.telephone, i.instructor_name, v.vehicle_registration_no, v.vehicle_type 
-        FROM lessons l
-        JOIN registrations r ON l.registration_id = r.registration_id
-        JOIN students s ON r.student_id = s.student_id
-        JOIN instructors i ON l.instructor_id = i.instructor_id
-        JOIN vehicles v ON l.vehicle_id = v.vehicle_id
+        FROM lesson l
+        JOIN registration r ON l.registration_id = r.registration_id
+        JOIN student s ON r.student_id = s.student_id
+        JOIN instructor i ON l.instructor_id = i.instructor_id
+        JOIN vehicle v ON l.vehicle_id = v.vehicle_id
         ORDER BY l.lesson_date DESC, l.start_time DESC
     ");
     $lessons = $stmt->fetchAll();
@@ -138,8 +138,8 @@ $registrations_dropdown = [];
 try {
     $stmt = $pdo->query("
         SELECT r.registration_id, r.course_name, s.first_name, s.surname, s.national_id 
-        FROM registrations r 
-        JOIN students s ON r.student_id = s.student_id
+        FROM registration r 
+        JOIN student s ON r.student_id = s.student_id
         ORDER BY s.surname, s.first_name
     ");
     $registrations_dropdown = $stmt->fetchAll();
@@ -148,14 +148,14 @@ try {
 // Fetch active instructors
 $instructors_dropdown = [];
 try {
-    $stmt = $pdo->query("SELECT instructor_id, instructor_name, license_type FROM instructors ORDER BY instructor_name");
+    $stmt = $pdo->query("SELECT instructor_id, instructor_name, license_type FROM instructor ORDER BY instructor_name");
     $instructors_dropdown = $stmt->fetchAll();
 } catch (Exception $e) {}
 
 // Fetch vehicles (only Active vehicles should be used for scheduling)
 $vehicles_dropdown = [];
 try {
-    $stmt = $pdo->query("SELECT vehicle_id, vehicle_registration_no, vehicle_type FROM vehicles WHERE status='Active' ORDER BY vehicle_registration_no");
+    $stmt = $pdo->query("SELECT vehicle_id, vehicle_registration_no, vehicle_type FROM vehicle WHERE status='Active' ORDER BY vehicle_registration_no");
     $vehicles_dropdown = $stmt->fetchAll();
 } catch (Exception $e) {}
 

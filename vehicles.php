@@ -16,11 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
     try {
         if ($vehicle_id) {
-            $stmt = $pdo->prepare("UPDATE vehicles SET vehicle_registration_no=?, vehicle_identity_no=?, vehicle_type=?, status=? WHERE vehicle_id=?");
+            $stmt = $pdo->prepare("UPDATE vehicle SET vehicle_registration_no=?, vehicle_identity_no=?, vehicle_type=?, status=? WHERE vehicle_id=?");
             $stmt->execute([$vehicle_registration_no, $vehicle_identity_no, $vehicle_type, $status, $vehicle_id]);
             $message = "Vehicle details updated successfully!";
         } else {
-            $stmt = $pdo->prepare("INSERT INTO vehicles (vehicle_registration_no, vehicle_identity_no, vehicle_type, status) VALUES (?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO vehicle (vehicle_registration_no, vehicle_identity_no, vehicle_type, status) VALUES (?, ?, ?, ?)");
             $stmt->execute([$vehicle_registration_no, $vehicle_identity_no, $vehicle_type, $status]);
             $message = "New vehicle registered in fleet successfully!";
         }
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 if (isset($_GET['delete'])) {
     $del_id = intval($_GET['delete']);
     try {
-        $stmt = $pdo->prepare("DELETE FROM vehicles WHERE vehicle_id=?");
+        $stmt = $pdo->prepare("DELETE FROM vehicle WHERE vehicle_id=?");
         $stmt->execute([$del_id]);
         $message = "Vehicle removed from fleet successfully.";
     } catch (Exception $e) {
@@ -46,7 +46,7 @@ if (isset($_GET['delete'])) {
 // Fetch all vehicles
 $vehicles = [];
 try {
-    $stmt = $pdo->query("SELECT * FROM vehicles ORDER BY vehicle_id DESC");
+    $stmt = $pdo->query("SELECT * FROM vehicle ORDER BY vehicle_id DESC");
     $vehicles = $stmt->fetchAll();
 } catch (Exception $e) {}
 

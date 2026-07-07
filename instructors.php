@@ -19,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
     try {
         if ($instructor_id) {
-            $stmt = $pdo->prepare("UPDATE instructors SET instructor_name=?, instructor_dob=?, national_id=?, license_number=?, license_type=?, telephone=?, email=? WHERE instructor_id=?");
+            $stmt = $pdo->prepare("UPDATE instructor SET instructor_name=?, instructor_dob=?, national_id=?, license_number=?, license_type=?, telephone=?, email=? WHERE instructor_id=?");
             $stmt->execute([$instructor_name, $instructor_dob, $national_id, $license_number, $license_type, $telephone, $email, $instructor_id]);
             $message = "Instructor profile updated successfully!";
         } else {
-            $stmt = $pdo->prepare("INSERT INTO instructors (instructor_name, instructor_dob, national_id, license_number, license_type, telephone, email) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO instructor (instructor_name, instructor_dob, national_id, license_number, license_type, telephone, email) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$instructor_name, $instructor_dob, $national_id, $license_number, $license_type, $telephone, $email]);
             $message = "New instructor registered successfully!";
         }
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 if (isset($_GET['delete'])) {
     $del_id = intval($_GET['delete']);
     try {
-        $stmt = $pdo->prepare("DELETE FROM instructors WHERE instructor_id=?");
+        $stmt = $pdo->prepare("DELETE FROM instructor WHERE instructor_id=?");
         $stmt->execute([$del_id]);
         $message = "Instructor profile deleted successfully!";
     } catch (Exception $e) {
@@ -49,7 +49,7 @@ if (isset($_GET['delete'])) {
 // Fetch all instructors
 $instructors = [];
 try {
-    $stmt = $pdo->query("SELECT * FROM instructors ORDER BY instructor_id DESC");
+    $stmt = $pdo->query("SELECT * FROM instructor ORDER BY instructor_id DESC");
     $instructors = $stmt->fetchAll();
 } catch (Exception $e) {}
 

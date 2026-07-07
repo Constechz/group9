@@ -15,7 +15,7 @@ if (isset($_GET['get_details_json'])) {
     $student_id = intval($_GET['get_details_json']);
     $registrations = [];
     try {
-        $stmt = $pdo->prepare("SELECT * FROM registrations WHERE student_id = ?");
+        $stmt = $pdo->prepare("SELECT * FROM registration WHERE student_id = ?");
         $stmt->execute([$student_id]);
         $registrations = $stmt->fetchAll();
     } catch (Exception $e) {}
@@ -49,12 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         try {
             if ($student_id) {
                 // UPDATE Student
-                $stmt = $pdo->prepare("UPDATE students SET surname=?, first_name=?, middle_name=?, date_of_birth=?, place_of_birth=?, residential_address=?, telephone=?, email=?, national_id=?, occupation=?, permit_number=?, permit_expiry_date=? WHERE student_id=?");
+                $stmt = $pdo->prepare("UPDATE student SET surname=?, first_name=?, middle_name=?, date_of_birth=?, place_of_birth=?, residential_address=?, telephone=?, email=?, national_id=?, occupation=?, permit_number=?, permit_expiry_date=? WHERE student_id=?");
                 $stmt->execute([$surname, $first_name, $middle_name, $date_of_birth, $place_of_birth, $residential_address, $telephone, $email, $national_id, $occupation, $permit_number, $permit_expiry_date, $student_id]);
                 $message = "Student profile updated successfully!";
             } else {
                 // INSERT New Student
-                $stmt = $pdo->prepare("INSERT INTO students (surname, first_name, middle_name, date_of_birth, place_of_birth, residential_address, telephone, email, national_id, occupation, permit_number, permit_expiry_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $pdo->prepare("INSERT INTO student (surname, first_name, middle_name, date_of_birth, place_of_birth, residential_address, telephone, email, national_id, occupation, permit_number, permit_expiry_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$surname, $first_name, $middle_name, $date_of_birth, $place_of_birth, $residential_address, $telephone, $email, $national_id, $occupation, $permit_number, $permit_expiry_date]);
                 $message = "New student registered successfully!";
             }
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 if (isset($_GET['delete'])) {
     $del_id = intval($_GET['delete']);
     try {
-        $stmt = $pdo->prepare("DELETE FROM students WHERE student_id=?");
+        $stmt = $pdo->prepare("DELETE FROM student WHERE student_id=?");
         $stmt->execute([$del_id]);
         $message = "Student deleted successfully!";
     } catch (Exception $e) {
@@ -80,7 +80,7 @@ if (isset($_GET['delete'])) {
 
 // Search filter
 $search_term = '';
-$query = "SELECT * FROM students";
+$query = "SELECT * FROM student";
 $params = [];
 
 if (isset($_GET['search']) && !empty(trim($_GET['search']))) {

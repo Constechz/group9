@@ -253,8 +253,8 @@
     </footer>
 
     <script>
-        const databaseSchema = {
-            managers: {
+                const databaseSchema = {
+            manager: {
                 description: "Stores administrative and operations manager accounts.",
                 columns: [
                     { name: "manager_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique identifier for each manager record." },
@@ -262,7 +262,7 @@
                     { name: "manager_role", type: "VARCHAR(50)", key: "", nullable: "NO", default: "'Manager'", desc: "Assigned job role role (e.g., General Manager, Operations Manager)." }
                 ]
             },
-            students: {
+            student: {
                 description: "Maintains records of all registered driving school students.",
                 columns: [
                     { name: "student_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique identifier for each student." },
@@ -280,7 +280,7 @@
                     { name: "permit_expiry_date", type: "DATE", key: "", nullable: "YES", default: "NULL", desc: "Expiry date of learner's driving permit." }
                 ]
             },
-            registrations: {
+            registration: {
                 description: "Tracks course enrollments, total costs, deposit payments, and balances.",
                 columns: [
                     { name: "registration_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique course registration booking ID." },
@@ -291,11 +291,11 @@
                     { name: "total_cost", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "1200.00", desc: "Total tuition fee billed." },
                     { name: "deposit", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "0.00", desc: "Upfront deposit fee paid." },
                     { name: "balance", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "1200.00", desc: "Remaining tuition balance (Total - Deposit/Payments)." },
-                    { name: "student_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Linked student ID (references students.student_id)." },
-                    { name: "manager_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Approving administrator ID (references managers.manager_id)." }
+                    { name: "student_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Linked student ID (references student.student_id)." },
+                    { name: "manager_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Approving administrator ID (references manager.manager_id)." }
                 ]
             },
-            payments: {
+            payment: {
                 description: "Logs billing payment transactions against registrations to track outstanding debt.",
                 columns: [
                     { name: "payment_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique payment receipt code." },
@@ -303,10 +303,10 @@
                     { name: "amount", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "None", desc: "Amount paid in this transaction." },
                     { name: "payment_type", type: "VARCHAR(50)", key: "", nullable: "NO", default: "'Cash'", desc: "Transaction method (Cash, MoMo, Bank Transfer)." },
                     { name: "balance_after_payment", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "None", desc: "Remaining registration balance after applying this payment." },
-                    { name: "registration_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Related course registration ID (references registrations.registration_id)." }
+                    { name: "registration_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Related course registration ID (references registration.registration_id)." }
                 ]
             },
-            instructors: {
+            instructor: {
                 description: "Stores profile details and driving training credentials of driving school instructors.",
                 columns: [
                     { name: "instructor_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique trainer ID number." },
@@ -319,7 +319,7 @@
                     { name: "email", type: "VARCHAR(100)", key: "", nullable: "YES", default: "NULL", desc: "Email address." }
                 ]
             },
-            vehicles: {
+            vehicle: {
                 description: "Tracks training vehicle assets and fleet availability status.",
                 columns: [
                     { name: "vehicle_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique vehicle fleet number." },
@@ -329,7 +329,7 @@
                     { name: "status", type: "VARCHAR(20)", key: "", nullable: "NO", default: "'Active'", desc: "Fleet status (Active, Maintenance, Out of Service)." }
                 ]
             },
-            lessons: {
+            lesson: {
                 description: "Schedules practical/theoretical lessons while checking overlaps.",
                 columns: [
                     { name: "lesson_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique lesson schedule booking code." },
@@ -338,9 +338,9 @@
                     { name: "start_time", type: "TIME", key: "", nullable: "NO", default: "None", desc: "Start time of lesson block." },
                     { name: "end_time", type: "TIME", key: "", nullable: "NO", default: "None", desc: "End time of lesson block." },
                     { name: "status", type: "VARCHAR(20)", key: "", nullable: "NO", default: "'Scheduled'", desc: "Session workflow status (Scheduled, Completed, Cancelled)." },
-                    { name: "registration_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Target registration details (references registrations.registration_id)." },
-                    { name: "instructor_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Assigned training instructor (references instructors.instructor_id)." },
-                    { name: "vehicle_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Vehicle asset used for practice (references vehicles.vehicle_id)." }
+                    { name: "registration_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Target registration details (references registration.registration_id)." },
+                    { name: "instructor_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Assigned training instructor (references instructor.instructor_id)." },
+                    { name: "vehicle_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Vehicle asset used for practice (references vehicle.vehicle_id)." }
                 ]
             }
         };

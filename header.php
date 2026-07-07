@@ -12,7 +12,7 @@ if (!isset($_SESSION['manager_id'])) {
 
 // Fetch active manager profile dynamically
 try {
-    $stmt = $pdo->prepare("SELECT * FROM managers WHERE manager_id = ?");
+    $stmt = $pdo->prepare("SELECT * FROM manager WHERE manager_id = ?");
     $stmt->execute([$_SESSION['manager_id']]);
     $active_manager = $stmt->fetch();
 } catch (Exception $e) {

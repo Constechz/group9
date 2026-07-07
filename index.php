@@ -7,19 +7,19 @@ include 'header.php';
 // Fetch KPIs
 try {
     // 1. Total Students
-    $stmt = $pdo->query("SELECT COUNT(*) FROM students");
+    $stmt = $pdo->query("SELECT COUNT(*) FROM student");
     $total_students = $stmt->fetchColumn();
 
     // 2. Total Payments (Revenue)
-    $stmt = $pdo->query("SELECT SUM(amount) FROM payments");
+    $stmt = $pdo->query("SELECT SUM(amount) FROM payment");
     $total_revenue = $stmt->fetchColumn() ?: 0.00;
 
     // 3. Upcoming Scheduled Lessons
-    $stmt = $pdo->query("SELECT COUNT(*) FROM lessons WHERE status = 'Scheduled'");
+    $stmt = $pdo->query("SELECT COUNT(*) FROM lesson WHERE status = 'Scheduled'");
     $scheduled_lessons = $stmt->fetchColumn();
 
     // 4. Active Vehicles
-    $stmt = $pdo->query("SELECT COUNT(*) FROM vehicles WHERE status = 'Active'");
+    $stmt = $pdo->query("SELECT COUNT(*) FROM vehicle WHERE status = 'Active'");
     $active_vehicles = $stmt->fetchColumn();
 } catch (Exception $e) {
     $total_students = 0;
@@ -31,14 +31,14 @@ try {
 // Fetch Recent Registrations
 $recent_registrations = [];
 try {
-    $stmt = $pdo->query("SELECT r.*, s.first_name, s.surname FROM registrations r JOIN students s ON r.student_id = s.student_id ORDER BY r.registration_id DESC LIMIT 4");
+    $stmt = $pdo->query("SELECT r.*, s.first_name, s.surname FROM registration r JOIN student s ON r.student_id = s.student_id ORDER BY r.registration_id DESC LIMIT 4");
     $recent_registrations = $stmt->fetchAll();
 } catch (Exception $e) {}
 
 // Fetch Lessons List
 $recent_lessons = [];
 try {
-    $stmt = $pdo->query("SELECT l.*, s.first_name AS student_first, s.surname AS student_sur, i.instructor_name, v.vehicle_registration_no FROM lessons l JOIN registrations r ON l.registration_id = r.registration_id JOIN students s ON r.student_id = s.student_id JOIN instructors i ON l.instructor_id = i.instructor_id JOIN vehicles v ON l.vehicle_id = v.vehicle_id ORDER BY l.lesson_date DESC, l.start_time DESC LIMIT 4");
+    $stmt = $pdo->query("SELECT l.*, s.first_name AS student_first, s.surname AS student_sur, i.instructor_name, v.vehicle_registration_no FROM lesson l JOIN registration r ON l.registration_id = r.registration_id JOIN student s ON r.student_id = s.student_id JOIN instructor i ON l.instructor_id = i.instructor_id JOIN vehicle v ON l.vehicle_id = v.vehicle_id ORDER BY l.lesson_date DESC, l.start_time DESC LIMIT 4");
     $recent_lessons = $stmt->fetchAll();
 } catch (Exception $e) {}
 
@@ -46,7 +46,7 @@ try {
 $months = [];
 $revenues = [];
 try {
-    $stmt = $pdo->query("SELECT DATE_FORMAT(payment_date, '%b %Y') as month, SUM(amount) as total FROM payments GROUP BY month ORDER BY MIN(payment_date) ASC");
+    $stmt = $pdo->query("SELECT DATE_FORMAT(payment_date, '%b %Y') as month, SUM(amount) as total FROM payment GROUP BY month ORDER BY MIN(payment_date) ASC");
     $monthly_data = $stmt->fetchAll();
     foreach ($monthly_data as $row) {
         $months[] = $row['month'];

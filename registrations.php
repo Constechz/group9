@@ -27,13 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         $pdo->beginTransaction();
         
         // INSERT Registration
-        $stmt = $pdo->prepare("INSERT INTO registrations (registration_date, commencement_date, completion_date, course_name, total_cost, deposit, balance, student_id, manager_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO registration (registration_date, commencement_date, completion_date, course_name, total_cost, deposit, balance, student_id, manager_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$registration_date, $commencement_date, $completion_date, $course_name, $total_cost, $deposit, $balance, $student_id, $manager_id]);
         $registration_id = $pdo->lastInsertId();
         
         // If there was a deposit, record a Payment record automatically!
         if ($deposit > 0) {
-            $stmt_pay = $pdo->prepare("INSERT INTO payments (payment_date, amount, payment_type, balance_after_payment, registration_id) VALUES (?, ?, ?, ?, ?)");
+            $stmt_pay = $pdo->prepare("INSERT INTO payment (payment_date, amount, payment_type, balance_after_payment, registration_id) VALUES (?, ?, ?, ?, ?)");
             $stmt_pay->execute([$registration_date, $deposit, 'Cash', $balance, $registration_id]);
         }
         
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $completion_date = !empty($_POST['completion_date']) ? $_POST['completion_date'] : null;
     
     try {
-        $stmt = $pdo->prepare("UPDATE registrations SET commencement_date=?, completion_date=? WHERE registration_id=?");
+        $stmt = $pdo->prepare("UPDATE registration SET commencement_date=?, completion_date=? WHERE registration_id=?");
         $stmt->execute([$commencement_date, $completion_date, $registration_id]);
         $message = "Enrollment dates updated successfully!";
     } catch (Exception $e) {
@@ -67,9 +67,9 @@ $registrations = [];
 try {
     $stmt = $pdo->query("
         SELECT r.*, s.first_name, s.surname, s.telephone, m.manager_name 
-        FROM registrations r 
-        JOIN students s ON r.student_id = s.student_id 
-        JOIN managers m ON r.manager_id = m.manager_id 
+        FROM registration r 
+        JOIN student s ON r.student_id = s.student_id 
+        JOIN manager m ON r.manager_id = m.manager_id 
         ORDER BY r.registration_id DESC
     ");
     $registrations = $stmt->fetchAll();
@@ -78,14 +78,14 @@ try {
 // Fetch students for dropdown
 $students_dropdown = [];
 try {
-    $stmt = $pdo->query("SELECT student_id, first_name, surname, national_id FROM students ORDER BY surname, first_name");
+    $stmt = $pdo->query("SELECT student_id, first_name, surname, national_id FROM student ORDER BY surname, first_name");
     $students_dropdown = $stmt->fetchAll();
 } catch (Exception $e) {}
 
 // Fetch managers for dropdown
 $managers_dropdown = [];
 try {
-    $stmt = $pdo->query("SELECT manager_id, manager_name FROM managers ORDER BY manager_name");
+    $stmt = $pdo->query("SELECT manager_id, manager_name FROM manager ORDER BY manager_name");
     $managers_dropdown = $stmt->fetchAll();
 } catch (Exception $e) {}
 

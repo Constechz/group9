@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!empty($username) && !empty($password)) {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM managers WHERE username = ?");
+            $stmt = $pdo->prepare("SELECT * FROM manager WHERE username = ?");
             $stmt->execute([$username]);
             $manager = $stmt->fetch();
 

@@ -241,14 +241,14 @@
         <div class="diagram-card" id="diagram-container">
             <div class="mermaid" id="mermaid-target">
 erDiagram
-    students ||--o{ registrations : "initiates"
-    managers ||--o{ registrations : "registers"
-    registrations ||--o{ payments : "makes"
-    registrations ||--o{ lessons : "contains"
-    instructors ||--o{ lessons : "conducts"
-    vehicles ||--o{ lessons : "assigned_to"
+    student ||--o{ registration : "initiates"
+    manager ||--o{ registration : "registers"
+    registration ||--o{ payment : "makes"
+    registration ||--o{ lesson : "contains"
+    instructor ||--o{ lesson : "conducts"
+    vehicle ||--o{ lesson : "assigned_to"
 
-    students {
+    student {
         int student_id PK
         varchar surname
         varchar first_name
@@ -264,13 +264,13 @@ erDiagram
         date permit_expiry_date
     }
 
-    managers {
+    manager {
         int manager_id PK
         varchar manager_name
         varchar manager_role
     }
 
-    registrations {
+    registration {
         int registration_id PK
         date registration_date
         date commencement_date
@@ -283,7 +283,7 @@ erDiagram
         int manager_id FK
     }
 
-    payments {
+    payment {
         int payment_id PK
         date payment_date
         decimal amount
@@ -292,7 +292,7 @@ erDiagram
         int registration_id FK
     }
 
-    instructors {
+    instructor {
         int instructor_id PK
         varchar instructor_name
         date instructor_dob
@@ -303,7 +303,7 @@ erDiagram
         varchar email
     }
 
-    vehicles {
+    vehicle {
         int vehicle_id PK
         varchar vehicle_registration_no UK
         varchar vehicle_identity_no UK
@@ -311,7 +311,7 @@ erDiagram
         varchar status
     }
 
-    lessons {
+    lesson {
         int lesson_id PK
         varchar lesson_type
         date lesson_date

@@ -62,32 +62,32 @@ The system aims to:
 ------------------------------------------------------------------------
 The database consists of 7 normalized tables:
 
-1. MANAGERS: Stores administrative users who approve registrations.
+1. MANAGER: Stores administrative users who approve registrations.
    - manager_id (PK), manager_name, manager_role.
 
-2. STUDENTS: Stores personal data, contact details, and driving permits.
+2. STUDENT: Stores personal data, contact details, and driving permits.
    - student_id (PK), surname, first_name, middle_name, date_of_birth,
      place_of_birth, residential_address, telephone, email, national_id,
      occupation, permit_number, permit_expiry_date.
 
-3. REGISTRATIONS: Tracks student course enrollments and balances.
+3. REGISTRATION: Tracks student course enrollments and balances.
    - registration_id (PK), registration_date, commencement_date,
      completion_date, course_name, total_cost, deposit, balance,
      student_id (FK), manager_id (FK).
 
-4. PAYMENTS: Logs financial billing transactions.
+4. PAYMENT: Logs financial billing transactions.
    - payment_id (PK), payment_date, amount, payment_type,
      balance_after_payment, registration_id (FK).
 
-5. INSTRUCTORS: Tracks instructors and their licensing qualifications.
+5. INSTRUCTOR: Tracks instructors and their licensing qualifications.
    - instructor_id (PK), instructor_name, instructor_dob, national_id,
      license_number, license_type, telephone, email.
 
-6. VEHICLES: Manages vehicle fleet assets and status.
+6. VEHICLE: Manages vehicle fleet assets and status.
    - vehicle_id (PK), vehicle_registration_no, vehicle_identity_no (VIN),
      vehicle_type, status (Active, Maintenance, Out of Service).
 
-7. LESSONS: Logs scheduled classes and connects them with resources.
+7. LESSON: Logs scheduled classes and connects them with resources.
    - lesson_id (PK), lesson_type, lesson_date, start_time, end_time,
      status (Scheduled, Completed, Cancelled), registration_id (FK),
      instructor_id (FK), vehicle_id (FK).

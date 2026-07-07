@@ -8,9 +8,9 @@ try {
     // 1. Student Registrations Report
     $stmt1 = $pdo->query("
         SELECT r.*, s.first_name, s.surname, s.telephone, s.national_id, m.manager_name 
-        FROM registrations r 
-        JOIN students s ON r.student_id = s.student_id 
-        JOIN managers m ON r.manager_id = m.manager_id 
+        FROM registration r 
+        JOIN student s ON r.student_id = s.student_id 
+        JOIN manager m ON r.manager_id = m.manager_id 
         ORDER BY r.registration_date DESC
     ");
     $report_registrations = $stmt1->fetchAll();
@@ -18,9 +18,9 @@ try {
     // 2. Student Payments Report
     $stmt2 = $pdo->query("
         SELECT p.*, r.course_name, s.first_name, s.surname, r.balance 
-        FROM payments p 
-        JOIN registrations r ON p.registration_id = r.registration_id 
-        JOIN students s ON r.student_id = s.student_id 
+        FROM payment p 
+        JOIN registration r ON p.registration_id = r.registration_id 
+        JOIN student s ON r.student_id = s.student_id 
         ORDER BY p.payment_date DESC
     ");
     $report_payments = $stmt2->fetchAll();
@@ -28,11 +28,11 @@ try {
     // 3. Lesson Schedule Report (Active Agenda)
     $stmt3 = $pdo->query("
         SELECT l.*, s.first_name, s.surname, i.instructor_name, v.vehicle_registration_no 
-        FROM lessons l 
-        JOIN registrations r ON l.registration_id = r.registration_id 
-        JOIN students s ON r.student_id = s.student_id 
-        JOIN instructors i ON l.instructor_id = i.instructor_id 
-        JOIN vehicles v ON l.vehicle_id = v.vehicle_id 
+        FROM lesson l 
+        JOIN registration r ON l.registration_id = r.registration_id 
+        JOIN student s ON r.student_id = s.student_id 
+        JOIN instructor i ON l.instructor_id = i.instructor_id 
+        JOIN vehicle v ON l.vehicle_id = v.vehicle_id 
         ORDER BY l.lesson_date ASC, l.start_time ASC
     ");
     $report_lessons = $stmt3->fetchAll();
@@ -40,8 +40,8 @@ try {
     // 4. Outstanding Balances Report
     $stmt4 = $pdo->query("
         SELECT r.*, s.first_name, s.surname, s.telephone, s.email 
-        FROM registrations r 
-        JOIN students s ON r.student_id = s.student_id 
+        FROM registration r 
+        JOIN student s ON r.student_id = s.student_id 
         WHERE r.balance > 0 
         ORDER BY r.balance DESC
     ");
@@ -50,11 +50,11 @@ try {
     // 5. Completed Lessons Report
     $stmt5 = $pdo->query("
         SELECT l.*, s.first_name, s.surname, i.instructor_name, v.vehicle_registration_no 
-        FROM lessons l 
-        JOIN registrations r ON l.registration_id = r.registration_id 
-        JOIN students s ON r.student_id = s.student_id 
-        JOIN instructors i ON l.instructor_id = i.instructor_id 
-        JOIN vehicles v ON l.vehicle_id = v.vehicle_id 
+        FROM lesson l 
+        JOIN registration r ON l.registration_id = r.registration_id 
+        JOIN student s ON r.student_id = s.student_id 
+        JOIN instructor i ON l.instructor_id = i.instructor_id 
+        JOIN vehicle v ON l.vehicle_id = v.vehicle_id 
         WHERE l.status = 'Completed' 
         ORDER BY l.lesson_date DESC
     ");
@@ -63,8 +63,8 @@ try {
     // 6. Vehicle Assignment / Usage Report
     $stmt6 = $pdo->query("
         SELECT v.vehicle_registration_no, v.vehicle_type, v.status, COUNT(l.lesson_id) as total_lessons 
-        FROM vehicles v 
-        LEFT JOIN lessons l ON v.vehicle_id = l.vehicle_id 
+        FROM vehicle v 
+        LEFT JOIN lesson l ON v.vehicle_id = l.vehicle_id 
         GROUP BY v.vehicle_id 
         ORDER BY total_lessons DESC
     ");
@@ -73,8 +73,8 @@ try {
     // 7. Instructor Assignment / Load Report
     $stmt7 = $pdo->query("
         SELECT i.instructor_name, i.license_type, i.telephone, COUNT(l.lesson_id) as total_lessons 
-        FROM instructors i 
-        LEFT JOIN lessons l ON i.instructor_id = l.instructor_id 
+        FROM instructor i 
+        LEFT JOIN lesson l ON i.instructor_id = l.instructor_id 
         GROUP BY i.instructor_id 
         ORDER BY total_lessons DESC
     ");

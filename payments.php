@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         $pdo->beginTransaction();
 
         // 1. Fetch active balance
-        $stmt_reg = $pdo->prepare("SELECT balance, total_cost, student_id FROM registrations WHERE registration_id = ?");
+        $stmt_reg = $pdo->prepare("SELECT balance, total_cost, student_id FROM registration WHERE registration_id = ?");
         $stmt_reg->execute([$registration_id]);
         $reg = $stmt_reg->fetch();
 
@@ -37,12 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         $new_balance = $current_balance - $amount;
 
         // 3. Insert payment
-        $stmt_pay = $pdo->prepare("INSERT INTO payments (payment_date, amount, payment_type, balance_after_payment, registration_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt_pay = $pdo->prepare("INSERT INTO payment (payment_date, amount, payment_type, balance_after_payment, registration_id) VALUES (?, ?, ?, ?, ?)");
         $stmt_pay->execute([$payment_date, $amount, $payment_type, $new_balance, $registration_id]);
         $payment_id = $pdo->lastInsertId();
 
         // 4. Update balance in registration table
-        $stmt_up = $pdo->prepare("UPDATE registrations SET balance = ? WHERE registration_id = ?");
+        $stmt_up = $pdo->prepare("UPDATE registration SET balance = ? WHERE registration_id = ?");
         $stmt_up->execute([$new_balance, $registration_id]);
 
         $pdo->commit();
@@ -64,9 +64,9 @@ $payments = [];
 try {
     $stmt = $pdo->query("
         SELECT p.*, r.course_name, s.first_name, s.surname, s.telephone 
-        FROM payments p 
-        JOIN registrations r ON p.registration_id = r.registration_id 
-        JOIN students s ON r.student_id = s.student_id 
+        FROM payment p 
+        JOIN registration r ON p.registration_id = r.registration_id 
+        JOIN student s ON r.student_id = s.student_id 
         ORDER BY p.payment_id DESC
     ");
     $payments = $stmt->fetchAll();
@@ -77,8 +77,8 @@ $registrations_dropdown = [];
 try {
     $stmt = $pdo->query("
         SELECT r.registration_id, r.course_name, r.balance, s.first_name, s.surname, s.national_id 
-        FROM registrations r 
-        JOIN students s ON r.student_id = s.student_id 
+        FROM registration r 
+        JOIN student s ON r.student_id = s.student_id 
         WHERE r.balance > 0 
         ORDER BY s.surname, s.first_name
     ");
@@ -91,10 +91,10 @@ if (isset($_GET['receipt'])) {
     try {
         $stmt = $pdo->prepare("
             SELECT p.*, r.course_name, r.total_cost, r.registration_date, s.first_name, s.surname, s.telephone, s.national_id, s.residential_address, m.manager_name
-            FROM payments p
-            JOIN registrations r ON p.registration_id = r.registration_id
-            JOIN students s ON r.student_id = s.student_id
-            JOIN managers m ON r.manager_id = m.manager_id
+            FROM payment p
+            JOIN registration r ON p.registration_id = r.registration_id
+            JOIN student s ON r.student_id = s.student_id
+            JOIN manager m ON r.manager_id = m.manager_id
             WHERE p.payment_id = ?
         ");
         $stmt->execute([$pay_id]);
