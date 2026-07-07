@@ -1,0 +1,261 @@
+========================================================================
+             ALMIGHTY DRIVING SCHOOL DATABASE MANAGEMENT SYSTEM
+                         FINAL PROJECT REPORT
+========================================================================
+COURSE:       ITE LEVEL 200 E CLASS
+GROUP:        GROUP 9
+PROJECT:      RELATIONAL DATABASE SYSTEM & PHP WEB INTERFACE
+ORGANIZATION: ALMIGHTY DRIVING SCHOOL (TANOSO, KUMASI)
+DATE:         JUNE 30, 2026
+
+------------------------------------------------------------------------
+1. GROUP MEMBERS & ROLES
+------------------------------------------------------------------------
+* MOSES SEDODEY & HAFSAH SALIFU
+  Role: Project Coordinators
+  Contact Numbers: [Insert Contact Numbers]
+
+* DIVINE PAUL KWABLA WORNYO
+  Role: Group Secretary
+  Contact Numbers: [Insert Contact Numbers]
+
+* ABDUL-SOMED IDDI & ISAAC YAKUBU NGOR
+  Role: Database Designers (ER Diagram & Schema)
+  Contact Numbers: [Insert Contact Numbers]
+
+* ARTHUR AMOAH PETER & ERIC BOATENG
+  Role: Web Application Developers & Video Presenters
+  Contact Numbers: [Insert Contact Numbers]
+
+* OBED ASOMANI & EMMANUEL OWUSU
+  Role: Systems Typing & Document Compilers
+  Contact Numbers: [Insert Contact Numbers]
+
+* JOSEPH APOSTLE AGYEPONG
+  Role: Photography & Requirement Gathering Lead
+  Contact Numbers: [Insert Contact Numbers]
+
+------------------------------------------------------------------------
+2. PROJECT BACKGROUND & OBJECTIVES
+------------------------------------------------------------------------
+Almighty Driving School has traditionally relied on manual ledger books to 
+manage student registrations, instructor assignments, vehicle fleet bookings, 
+and tuition payments. This manual process has frequently resulted in:
+1. Double-booking conflicts where an instructor or vehicle is assigned to 
+   multiple lessons at the same time.
+2. Missing or fragmented student financial records.
+3. Lack of system verification for student permits and outstanding balances 
+   prior to taking practical road lessons.
+
+To solve these challenges, Group 9 designed and developed a computerized 
+relational database management system with an interactive PHP web interface. 
+The system aims to:
+- Structure all operational data into a normalized relational model.
+- Automatically prevent scheduling conflicts for vehicles, instructors, 
+  and students.
+- Maintain accurate balance tracking where payments are allocated to 
+  specific course enrollments.
+- Log permit expiration status to verify road eligibility.
+
+------------------------------------------------------------------------
+3. RELATIONAL DATABASE DESIGN (SCHEMA DESCRIPTION)
+------------------------------------------------------------------------
+The database consists of 7 normalized tables:
+
+1. MANAGERS: Stores administrative users who approve registrations.
+   - manager_id (PK), manager_name, manager_role.
+
+2. STUDENTS: Stores personal data, contact details, and driving permits.
+   - student_id (PK), surname, first_name, middle_name, date_of_birth,
+     place_of_birth, residential_address, telephone, email, national_id,
+     occupation, permit_number, permit_expiry_date.
+
+3. REGISTRATIONS: Tracks student course enrollments and balances.
+   - registration_id (PK), registration_date, commencement_date,
+     completion_date, course_name, total_cost, deposit, balance,
+     student_id (FK), manager_id (FK).
+
+4. PAYMENTS: Logs financial billing transactions.
+   - payment_id (PK), payment_date, amount, payment_type,
+     balance_after_payment, registration_id (FK).
+
+5. INSTRUCTORS: Tracks instructors and their licensing qualifications.
+   - instructor_id (PK), instructor_name, instructor_dob, national_id,
+     license_number, license_type, telephone, email.
+
+6. VEHICLES: Manages vehicle fleet assets and status.
+   - vehicle_id (PK), vehicle_registration_no, vehicle_identity_no (VIN),
+     vehicle_type, status (Active, Maintenance, Out of Service).
+
+7. LESSONS: Logs scheduled classes and connects them with resources.
+   - lesson_id (PK), lesson_type, lesson_date, start_time, end_time,
+     status (Scheduled, Completed, Cancelled), registration_id (FK),
+     instructor_id (FK), vehicle_id (FK).
+
+Design Improvements Made:
+- "Permit_Number" and "Permit_Expiry_Date" were added directly to the 
+  STUDENT table to validate road-readiness.
+- "PAYMENT" and "LESSON" tables were linked directly to "REGISTRATION" 
+  rather than "STUDENT" to allow proper account tracking if a student 
+  registers for multiple driving courses over time.
+
+------------------------------------------------------------------------
+4. DATABASE CONNECTIVITY MECHANICS
+------------------------------------------------------------------------
+The application connects to the MySQL database server using PHP Data Objects
+(PDO). This method is chosen for its security (support for prepared statements 
+to prevent SQL injection), transaction support, and clean error handling.
+
+Connection Configuration (implemented in "db.php"):
+- Host: 127.0.0.1
+- Port: 3306 (Standard MySQL port)
+- Database Name: almighty_driving_school
+- Username: root
+- Password: [Blank by default on XAMPP]
+- Charset: utf8mb4 (supports full unicode/characters)
+
+Code Implementation Example:
+----------------------------
+$dsn = "mysql:host=127.0.0.1;port=3306;dbname=almighty_driving_school;charset=utf8mb4";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+$pdo = new PDO($dsn, "root", "", $options);
+----------------------------
+
+During page loads, files include "db.php" at the top. The database object 
+($pdo) is then used to prepare and execute SQL statements safely.
+
+------------------------------------------------------------------------
+5. USER INTERFACE & SYSTEM INTERACTION WORKFLOW
+------------------------------------------------------------------------
+The system features a custom, modern UI styled via a unified stylesheet ("style.css").
+Users interact with the system through the following interface layout:
+
+1. Sidebar Navigation (Left Panel):
+   Provides immediate access to the 8 core operational hubs:
+   - Dashboard: Centralized performance summaries, KPI metrics, and live charts.
+   - Students: Personal profiles and driving permit validation registry.
+   - Registrations: Enrollment management and student balance tracking.
+   - Payments: Logs billing transactions and prints invoices.
+   - Lessons: Schedule manager with overlap protection.
+   - Instructors: Records for teaching staff qualifications.
+   - Vehicles: Asset status tracking for training fleet cars.
+   - Reports Hub: Detailed reports analytics dashboard.
+
+2. Interaction Framework:
+   - Modal Forms: Click-to-open popups are used to add/edit records (e.g., registering 
+     a student or logging a payment) without forcing a full page reload, providing 
+     a fluid, app-like user experience.
+   - Search Bars: Real-time queries filter list tables by name, phone, or ID code.
+   - Response Banners: Flash alert banners notify users of success or show detailed 
+     error warnings (such as scheduling conflict blockages) that fade out automatically.
+   - Print Layouts: A specialized print media query hides navigation menus and adjusts 
+     margins when printing receipts or active reports.
+
+------------------------------------------------------------------------
+6. HOW THE MAIN FEATURES WORK
+------------------------------------------------------------------------
+A) Student Registry & Permit Expiration Check
+   * Action: Admin inputs student registration details, including Ghana Card 
+     and optional Learner's Permit number and expiry date.
+   * Logic: The system automatically compares the permit's expiry date against 
+     the current calendar date. In the student table, a dynamic badge is displayed:
+     - "Valid Permit" (Green): If a permit is active.
+     - "Expired Permit" (Orange): If the expiry date is in the past.
+     - "No Permit" (Red): If no permit details have been registered yet.
+
+B) Student Course Enrollment & Balance Tracking
+   * Action: Admin selects a student, course (Beginner, Refresher, Defensive), 
+     deposit paid, and expected dates.
+   * Logic: On submission, the system records the enrollment. The starting 
+     account balance is calculated dynamically: "total_cost - deposit". 
+     *Database Integrity:* If a deposit is paid, the system automatically inserts 
+     an initial record into the PAYMENTS table and links it to this registration ID, 
+     maintaining correct bookkeeping.
+
+C) Billing Transactions & Invoice Printing
+   * Action: Admin chooses an active student account with an outstanding balance, 
+     inputs the payment amount, and selects the payment method (Cash, MoMo, Bank).
+   * Logic: The system checks that the payment amount does not exceed the remaining 
+     outstanding balance. Upon approval, it inserts the payment record, subtracts 
+     the payment amount from the registration's balance, and opens a print-friendly 
+     Invoice Receipt displaying student details, payment amount, remaining balance, 
+     and a manager signature field.
+
+D) Lesson Scheduler with Double-Booking Collision Prevention
+   * Action: Admin books a practical/theory lesson by entering the student's 
+     registration ID, instructor, vehicle, date, start time, and end time.
+   * Logic: Before saving, the system runs three overlapping time validations:
+     1. Instructor Availability: Checks if the instructor is booked for any other 
+        active lesson during the selected hours.
+     2. Vehicle Availability: Checks if the training vehicle is already booked for 
+        another lesson during those hours.
+     3. Student Availability: Checks if the student is scheduled for another lesson 
+        at the same time.
+     *Conflict Protection:* If any overlap is found, the query returns count > 0, 
+     the system aborts the insert, and triggers an error banner blocking the schedule.
+
+------------------------------------------------------------------------
+7. DEMONSTRATION OF GENERATED REPORTS & BUSINESS USEFULNESS
+------------------------------------------------------------------------
+The system serves as a central reporting office. Below is a detailed breakdown 
+of the columns rendered by each report and their exact value to the business:
+
+1. Student Registration Report
+   - Columns: Registration Date, Student Name, Ghana Card, Course Name, Approved Manager, Commencement Date.
+   - Usefulness: Tracks monthly enrollment spikes, popular courses, and provides 
+     demographic indicators to plan school operations and schedules.
+
+2. Student Payment Ledger Report
+   - Columns: Receipt ID, Payment Date, Student Name, Registered Course, Payment Method, Amount Paid, Remaining Balance.
+   - Usefulness: Serves as the primary ledger for auditing daily collections, 
+     preventing theft, and verifying revenue streams.
+
+3. Master Lesson Schedule Report
+   - Columns: Lesson Date & Time Block, Student Name, Instructor Name, Assigned Vehicle, Lesson Type, Status.
+   - Usefulness: Provides a master calendar overview for daily dispatch, tracking 
+     upcoming assessments, and monitoring lessons backlog.
+
+4. Outstanding Balances Report (Accounts Receivable)
+   - Columns: Registration ID, Student Name, Telephone, Registered Course, Total Cost, Deposit Paid, Outstanding Debt.
+   - Usefulness: Critical for financial health. Identifies students who owe payments 
+     so managers can restrict scheduling additional practical lessons until arrears 
+     are settled.
+
+5. Completed Lessons Report
+   - Columns: Date & Time, Student Name, Instructor, Vehicle Used, Lesson Class.
+   - Usefulness: Serves as an audit trail of completed hours, allowing managers 
+     to certify that a student has completed their required curriculum before sending 
+     them for the official DVLA licensing exams.
+
+6. Vehicle Fleet Usage Report
+   - Columns: Registration No., Vehicle Type, Status (Active, Maintenance, Out of Service), Total Lessons Conducted.
+   - Usefulness: Monitors vehicle workloads. High lesson counts flag vehicles due 
+     for maintenance checks (oil change, tire rotations) to ensure student safety.
+
+7. Instructor Allocation & Workload Report
+   - Columns: Instructor Name, License Class Type, Contact Number, Total Lessons Booked.
+   - Usefulness: Evaluates instructor performance and helps balance workloads, 
+     preventing trainer exhaustion and guiding staff hiring decisions.
+
+------------------------------------------------------------------------
+8. SYSTEM DEPLOYMENT DIRECTIONS
+------------------------------------------------------------------------
+1. Copy the "group9" directory into your local XAMPP web directory 
+   (typically "C:\xampp\htdocs\group9").
+2. Ensure the Apache and MySQL services are started in your XAMPP Panel.
+3. Import the database schema and seed data by running the "database.sql" 
+   script in phpMyAdmin, or execute it via cmd:
+   "C:\xampp\mysql\bin\mysql.exe -u root -h 127.0.0.1 --port=3306 < database.sql"
+4. Open your browser and navigate to: http://localhost/group9/
+5. The application will connect automatically to MySQL and show the login portal. 
+   Use either of the default credentials to access the dashboard:
+   - Account A (Hafsah Salifu): Username: "hafsah" | Password: "admin123"
+   - Account B (Moses Sedodey): Username: "moses"  | Password: "admin123"
+
+========================================================================
+                         END OF REPORT FILE
+========================================================================

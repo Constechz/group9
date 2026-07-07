@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almighty Driving School - ER Diagram Viewer</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Mermaid JS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            themeVariables: {
+                primaryColor: '#6366f1',
+                primaryTextColor: '#f8fafc',
+                primaryBorderColor: '#4338ca',
+                lineColor: '#cbd5e1',
+                secondaryColor: '#1e293b',
+                tertiaryColor: '#0f172a'
+            }
+        });
+    </script>
+
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #0f172a;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --border-color: #334155;
+            --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1400px;
+            padding: 2.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5b4fc, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+            background-color: rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        main {
+            width: 100%;
+            max-width: 1400px;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .diagram-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+        }
+
+        .mermaid {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .info-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background-color: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.75rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #a5b4fc;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card ul {
+            list-style: none;
+        }
+
+        .info-card li {
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-card li strong {
+            color: var(--text-primary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 6px;
+            background-color: var(--border-color);
+            color: var(--text-primary);
+            margin-left: 0.5rem;
+            width: fit-content;
+        }
+
+        footer.site-footer {
+            width: 100%;
+            max-width: 1400px;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        /* SVG styles adjustment to ensure clean rendering */
+        svg {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Almighty Driving School</h1>
+            <p>Database Entity Relationship (ER) Diagram • Group 9</p>
+        </div>
+        <div class="controls">
+            <button class="btn btn-primary" onclick="downloadPNG()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Download PNG
+            </button>
+            <button class="btn" onclick="downloadSVG()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Download SVG
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="diagram-card" id="diagram-container">
+            <div class="mermaid" id="mermaid-target">
+erDiagram
+    students ||--o{ registrations : "initiates"
+    managers ||--o{ registrations : "registers"
+    registrations ||--o{ payments : "makes"
+    registrations ||--o{ lessons : "contains"
+    instructors ||--o{ lessons : "conducts"
+    vehicles ||--o{ lessons : "assigned_to"
+
+    students {
+        int student_id PK
+        varchar surname
+        varchar first_name
+        varchar middle_name
+        date date_of_birth
+        varchar place_of_birth
+        varchar residential_address
+        varchar telephone
+        varchar email
+        varchar national_id UK
+        varchar occupation
+        varchar permit_number
+        date permit_expiry_date
+    }
+
+    managers {
+        int manager_id PK
+        varchar manager_name
+        varchar manager_role
+    }
+
+    registrations {
+        int registration_id PK
+        date registration_date
+        date commencement_date
+        date completion_date
+        varchar course_name
+        decimal total_cost
+        decimal deposit
+        decimal balance
+        int student_id FK
+        int manager_id FK
+    }
+
+    payments {
+        int payment_id PK
+        date payment_date
+        decimal amount
+        varchar payment_type
+        decimal balance_after_payment
+        int registration_id FK
+    }
+
+    instructors {
+        int instructor_id PK
+        varchar instructor_name
+        date instructor_dob
+        varchar national_id UK
+        varchar license_number UK
+        varchar license_type
+        varchar telephone
+        varchar email
+    }
+
+    vehicles {
+        int vehicle_id PK
+        varchar vehicle_registration_no UK
+        varchar vehicle_identity_no UK
+        varchar vehicle_type
+        varchar status
+    }
+
+    lessons {
+        int lesson_id PK
+        varchar lesson_type
+        date lesson_date
+        time start_time
+        time end_time
+        varchar status
+        int registration_id FK
+        int instructor_id FK
+        int vehicle_id FK
+    }
+            </div>
+        </div>
+
+        <section class="info-section">
+            <div class="info-card">
+                <h3>👥 Core Entities</h3>
+                <ul>
+                    <li>
+                        <strong>Students</strong>
+                        <span>Holds personal info, national identification, and driving permit status.</span>
+                    </li>
+                    <li>
+                        <strong>Instructors</strong>
+                        <span>Stores information about teachers, license classes, and contact info.</span>
+                    </li>
+                    <li>
+                        <strong>Managers</strong>
+                        <span>Tracks administrative staff managing operations and registrations.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <h3>📝 Operations</h3>
+                <ul>
+                    <li>
+                        <strong>Registrations</strong>
+                        <span>Links a student to courses, tracking costs, deposits, balances, and dates.</span>
+                    </li>
+                    <li>
+                        <strong>Payments</strong>
+                        <span>Records individual transactional payments made against registrations.</span>
+                    </li>
+                    <li>
+                        <strong>Lessons</strong>
+                        <span>Schedules theoretical & practical sessions connecting registrations, instructors, and vehicles.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <h3>⚙️ Assets</h3>
+                <ul>
+                    <li>
+                        <strong>Vehicles</strong>
+                        <span>Stores vehicle registry, types (sedan, SUV, truck), and maintenance statuses.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Almighty Driving School Database Project. Group 9 - ITE Class.</p>
+    </footer>
+
+    <script>
+        function getSVGString() {
+            const svgElement = document.querySelector('.mermaid svg');
+            if (!svgElement) return null;
+            
+            const serializer = new XMLSerializer();
+            let svgString = serializer.serializeToString(svgElement);
+            
+            // Fix svg width/height attributes for external rendering
+            const bbox = svgElement.getBoundingClientRect();
+            if (!svgString.includes('width=')) {
+                svgString = svgString.replace('<svg', `<svg width="${bbox.width}" height="${bbox.height}"`);
+            }
+            
+            if (!svgString.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+                svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+            }
+            if (!svgString.match(/^<svg[^>]+xmlns:xlink="http:\/\/www\.w3\.org\/1999\/xlink"/)) {
+                svgString = svgString.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+            }
+            return '<?xml version="1.0" standalone="no"?>\r\n' + svgString;
+        }
+
+        function downloadSVG() {
+            const svgString = getSVGString();
+            if (!svgString) {
+                alert('Diagram is not fully rendered yet. Please wait.');
+                return;
+            }
+            
+            const blob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            
+            const downloadLink = document.createElement("a");
+            downloadLink.href = url;
+            downloadLink.download = "almighty_driving_school_er_diagram.svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadPNG() {
+            const svgElement = document.querySelector('.mermaid svg');
+            if (!svgElement) {
+                alert('Diagram is not fully rendered yet. Please wait.');
+                return;
+            }
+            
+            const svgString = getSVGString();
+            const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(svgBlob);
+            
+            const image = new Image();
+            image.onload = () => {
+                const canvas = document.createElement('canvas');
+                const bbox = svgElement.getBoundingClientRect();
+                
+                // Scale factor for high definition download
+                const scale = 2;
+                canvas.width = bbox.width * scale;
+                canvas.height = bbox.height * scale;
+                
+                const context = canvas.getContext('2d');
+                
+                // Draw a nice dark background matching the theme
+                context.fillStyle = '#1e293b'; 
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw the scaled SVG image onto the canvas
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                
+                const png = canvas.toDataURL('image/png');
+                const downloadLink = document.createElement('a');
+                downloadLink.href = png;
+                downloadLink.download = 'almighty_driving_school_er_diagram.png';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(url);
+            };
+            image.src = url;
+        }
+    </script>
+</body>
+</html>
