@@ -161,9 +161,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="login-card">
         <div class="login-header">
-            <div class="login-logo-icon">
-                <i class="fa-solid fa-car-side"></i>
-            </div>
             <h2 class="login-title">Almighty Driving</h2>
             <p class="login-subtitle">Database Portal Authentication</p>
         </div>

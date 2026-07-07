@@ -49,9 +49,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <!-- Mobile Navigation Top Bar -->
     <div class="mobile-top-bar no-print">
         <div class="mobile-logo">
-            <div class="mobile-logo-icon">
-                <i class="fa-solid fa-car-side"></i>
-            </div>
             <span class="mobile-logo-text">Almighty Driving</span>
         </div>
         <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle Navigation">
