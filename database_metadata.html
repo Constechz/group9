@@ -259,7 +259,9 @@
                 columns: [
                     { name: "manager_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique identifier for each manager record." },
                     { name: "manager_name", type: "VARCHAR(100)", key: "", nullable: "NO", default: "None", desc: "Full name of the manager." },
-                    { name: "manager_role", type: "VARCHAR(50)", key: "", nullable: "NO", default: "'Manager'", desc: "Assigned job role role (e.g., General Manager, Operations Manager)." }
+                    { name: "manager_role", type: "VARCHAR(50)", key: "", nullable: "NO", default: "'Manager'", desc: "Assigned job role role (e.g., General Manager, Operations Manager)." },
+                    { name: "username", type: "VARCHAR(50)", key: "UK", nullable: "NO", default: "None", desc: "Unique login username." },
+                    { name: "password", type: "VARCHAR(255)", key: "", nullable: "NO", default: "None", desc: "Hashed security password." }
                 ]
             },
             student: {

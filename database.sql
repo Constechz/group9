@@ -10,7 +10,9 @@ USE almighty_driving_school;
 CREATE TABLE IF NOT EXISTS manager (
     manager_id INT AUTO_INCREMENT PRIMARY KEY,
     manager_name VARCHAR(100) NOT NULL,
-    manager_role VARCHAR(50) NOT NULL DEFAULT 'Manager'
+    manager_role VARCHAR(50) NOT NULL DEFAULT 'Manager',
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
 -- 2. STUDENT
@@ -100,9 +102,9 @@ CREATE TABLE IF NOT EXISTS lesson (
 -- ==========================================
 
 -- Seed manager
-INSERT INTO manager (manager_id, manager_name, manager_role) VALUES
-(1, 'Hafsah Salifu', 'General Manager'),
-(2, 'Moses Sedodey', 'Operations Manager');
+INSERT INTO manager (manager_id, manager_name, manager_role, username, password) VALUES
+(1, 'Hafsah Salifu', 'General Manager', 'hafsah', '$2y$10$t6HGgASKRS2C/lYPYk1ZNOhaYHi2id2y9bX0IqwmT9MnioT6Exu2y'),
+(2, 'Moses Sedodey', 'Operations Manager', 'moses', '$2y$10$t6HGgASKRS2C/lYPYk1ZNOhaYHi2id2y9bX0IqwmT9MnioT6Exu2y');
 
 -- Seed student
 INSERT INTO student (student_id, surname, first_name, middle_name, date_of_birth, place_of_birth, residential_address, telephone, email, national_id, occupation, permit_number, permit_expiry_date) VALUES
