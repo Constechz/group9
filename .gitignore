@@ -1,0 +1,6 @@
+# Ignore local database architecture report
+database_architecture_report.html
+
+# Ignore scratch files and test scripts
+test_db.php
+scratch/
