@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almighty Driving School - Database Metadata Table</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --border-color: #334155;
+            --pk-color: #10b981;
+            --fk-color: #3b82f6;
+            --uk-color: #f59e0b;
+            --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5b4fc, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+            background-color: rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        main {
+            width: 100%;
+            max-width: 1200px;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .table-section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+
+        .table-header h2 {
+            font-size: 1.5rem;
+            color: #a5b4fc;
+            margin-bottom: 0.25rem;
+        }
+
+        .table-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: rgba(15, 23, 42, 0.3);
+            color: var(--text-primary);
+            font-weight: 600;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+
+        tr:hover td {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .badge-pk {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--pk-color);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-fk {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: var(--fk-color);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .badge-uk {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--uk-color);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-null {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .badge-notnull {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        code {
+            font-family: monospace;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            color: #cbd5e1;
+        }
+
+        footer {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Database Metadata & Schema</h1>
+            <p>Almighty Driving School Management System • Data Dictionary</p>
+        </div>
+        <div class="controls">
+            <a href="er_diagram.html" class="btn">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                View ER Diagram
+            </a>
+            <button class="btn btn-primary" onclick="downloadCSV()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Download CSV Metadata
+            </button>
+        </div>
+    </header>
+
+    <main id="meta-tables-container">
+        <!-- JS will populate some parts but static HTML ensures SEO & fast rendering -->
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Almighty Driving School Database Project. Group 9 - ITE Class.</p>
+    </footer>
+
+    <script>
+        const databaseSchema = {
+            managers: {
+                description: "Stores administrative and operations manager accounts.",
+                columns: [
+                    { name: "manager_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique identifier for each manager record." },
+                    { name: "manager_name", type: "VARCHAR(100)", key: "", nullable: "NO", default: "None", desc: "Full name of the manager." },
+                    { name: "manager_role", type: "VARCHAR(50)", key: "", nullable: "NO", default: "'Manager'", desc: "Assigned job role role (e.g., General Manager, Operations Manager)." }
+                ]
+            },
+            students: {
+                description: "Maintains records of all registered driving school students.",
+                columns: [
+                    { name: "student_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique identifier for each student." },
+                    { name: "surname", type: "VARCHAR(50)", key: "", nullable: "NO", default: "None", desc: "Last/Family name of the student." },
+                    { name: "first_name", type: "VARCHAR(50)", key: "", nullable: "NO", default: "None", desc: "First/Given name of the student." },
+                    { name: "middle_name", type: "VARCHAR(50)", key: "", nullable: "YES", default: "NULL", desc: "Optional middle name(s)." },
+                    { name: "date_of_birth", type: "DATE", key: "", nullable: "NO", default: "None", desc: "Date of birth (used for age verification)." },
+                    { name: "place_of_birth", type: "VARCHAR(100)", key: "", nullable: "YES", default: "NULL", desc: "Student's city or place of birth." },
+                    { name: "residential_address", type: "VARCHAR(255)", key: "", nullable: "NO", default: "None", desc: "Physical home address." },
+                    { name: "telephone", type: "VARCHAR(20)", key: "", nullable: "NO", default: "None", desc: "Primary telephone contact number." },
+                    { name: "email", type: "VARCHAR(100)", key: "", nullable: "NO", default: "None", desc: "Email address for receipt logs and communications." },
+                    { name: "national_id", type: "VARCHAR(50)", key: "UK", nullable: "NO", default: "None", desc: "Unique Ghana Card Identification Number." },
+                    { name: "occupation", type: "VARCHAR(100)", key: "", nullable: "YES", default: "NULL", desc: "Student's job/profession." },
+                    { name: "permit_number", type: "VARCHAR(50)", key: "", nullable: "YES", default: "NULL", desc: "Learner's driving permit ID code." },
+                    { name: "permit_expiry_date", type: "DATE", key: "", nullable: "YES", default: "NULL", desc: "Expiry date of learner's driving permit." }
+                ]
+            },
+            registrations: {
+                description: "Tracks course enrollments, total costs, deposit payments, and balances.",
+                columns: [
+                    { name: "registration_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique course registration booking ID." },
+                    { name: "registration_date", type: "DATE", key: "", nullable: "NO", default: "None", desc: "Date enrollment was officially recorded." },
+                    { name: "commencement_date", type: "DATE", key: "", nullable: "YES", default: "NULL", desc: "Scheduled start date of classes." },
+                    { name: "completion_date", type: "DATE", key: "", nullable: "YES", default: "NULL", desc: "Date course was completed." },
+                    { name: "course_name", type: "VARCHAR(100)", key: "", nullable: "NO", default: "'Beginner Driving Course'", desc: "Registered course type (e.g. Refresher, Beginner)." },
+                    { name: "total_cost", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "1200.00", desc: "Total tuition fee billed." },
+                    { name: "deposit", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "0.00", desc: "Upfront deposit fee paid." },
+                    { name: "balance", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "1200.00", desc: "Remaining tuition balance (Total - Deposit/Payments)." },
+                    { name: "student_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Linked student ID (references students.student_id)." },
+                    { name: "manager_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Approving administrator ID (references managers.manager_id)." }
+                ]
+            },
+            payments: {
+                description: "Logs billing payment transactions against registrations to track outstanding debt.",
+                columns: [
+                    { name: "payment_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique payment receipt code." },
+                    { name: "payment_date", type: "DATE", key: "", nullable: "NO", default: "None", desc: "Date payment transaction took place." },
+                    { name: "amount", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "None", desc: "Amount paid in this transaction." },
+                    { name: "payment_type", type: "VARCHAR(50)", key: "", nullable: "NO", default: "'Cash'", desc: "Transaction method (Cash, MoMo, Bank Transfer)." },
+                    { name: "balance_after_payment", type: "DECIMAL(10,2)", key: "", nullable: "NO", default: "None", desc: "Remaining registration balance after applying this payment." },
+                    { name: "registration_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Related course registration ID (references registrations.registration_id)." }
+                ]
+            },
+            instructors: {
+                description: "Stores profile details and driving training credentials of driving school instructors.",
+                columns: [
+                    { name: "instructor_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique trainer ID number." },
+                    { name: "instructor_name", type: "VARCHAR(100)", key: "", nullable: "NO", default: "None", desc: "Full name of the instructor." },
+                    { name: "instructor_dob", type: "DATE", key: "", nullable: "YES", default: "NULL", desc: "Date of birth." },
+                    { name: "national_id", type: "VARCHAR(50)", key: "UK", nullable: "NO", default: "None", desc: "Unique Ghana Card Identification." },
+                    { name: "license_number", type: "VARCHAR(50)", key: "UK", nullable: "NO", default: "None", desc: "Instructor's official DVLA license number." },
+                    { name: "license_type", type: "VARCHAR(20)", key: "", nullable: "NO", default: "None", desc: "Driver license class category (e.g. Class E, Class F)." },
+                    { name: "telephone", type: "VARCHAR(20)", key: "", nullable: "YES", default: "NULL", desc: "Primary phone number contact." },
+                    { name: "email", type: "VARCHAR(100)", key: "", nullable: "YES", default: "NULL", desc: "Email address." }
+                ]
+            },
+            vehicles: {
+                description: "Tracks training vehicle assets and fleet availability status.",
+                columns: [
+                    { name: "vehicle_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique vehicle fleet number." },
+                    { name: "vehicle_registration_no", type: "VARCHAR(50)", key: "UK", nullable: "NO", default: "None", desc: "License plate registration number." },
+                    { name: "vehicle_identity_no", type: "VARCHAR(50)", key: "UK", nullable: "NO", default: "None", desc: "Unique Vehicle Identification Number (VIN)." },
+                    { name: "vehicle_type", type: "VARCHAR(50)", key: "", nullable: "NO", default: "None", desc: "Make and description (e.g. Manual Toyota Yaris)." },
+                    { name: "status", type: "VARCHAR(20)", key: "", nullable: "NO", default: "'Active'", desc: "Fleet status (Active, Maintenance, Out of Service)." }
+                ]
+            },
+            lessons: {
+                description: "Schedules practical/theoretical lessons while checking overlaps.",
+                columns: [
+                    { name: "lesson_id", type: "INT", key: "PK", nullable: "NO", default: "AUTO_INCREMENT", desc: "Unique lesson schedule booking code." },
+                    { name: "lesson_type", type: "VARCHAR(50)", key: "", nullable: "NO", default: "None", desc: "Type of lesson class (Theory, Practical, Assessment)." },
+                    { name: "lesson_date", type: "DATE", key: "", nullable: "NO", default: "None", desc: "Scheduled calendar date." },
+                    { name: "start_time", type: "TIME", key: "", nullable: "NO", default: "None", desc: "Start time of lesson block." },
+                    { name: "end_time", type: "TIME", key: "", nullable: "NO", default: "None", desc: "End time of lesson block." },
+                    { name: "status", type: "VARCHAR(20)", key: "", nullable: "NO", default: "'Scheduled'", desc: "Session workflow status (Scheduled, Completed, Cancelled)." },
+                    { name: "registration_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Target registration details (references registrations.registration_id)." },
+                    { name: "instructor_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Assigned training instructor (references instructors.instructor_id)." },
+                    { name: "vehicle_id", type: "INT", key: "FK", nullable: "NO", default: "None", desc: "Vehicle asset used for practice (references vehicles.vehicle_id)." }
+                ]
+            }
+        };
+
+        function renderTables() {
+            const container = document.getElementById('meta-tables-container');
+            container.innerHTML = '';
+
+            for (const [tableName, details] of Object.entries(databaseSchema)) {
+                const section = document.createElement('section');
+                section.className = 'table-section';
+                
+                let rowsHtml = '';
+                details.columns.forEach(col => {
+                    let keyBadge = '';
+                    if (col.key === 'PK') keyBadge = '<span class="badge badge-pk">PK</span>';
+                    else if (col.key === 'FK') keyBadge = '<span class="badge badge-fk">FK</span>';
+                    else if (col.key === 'UK') keyBadge = '<span class="badge badge-uk">Unique</span>';
+
+                    let nullBadge = col.nullable === 'YES' 
+                        ? '<span class="badge badge-null">Null</span>' 
+                        : '<span class="badge badge-notnull">No Null</span>';
+
+                    rowsHtml += `
+                        <tr>
+                            <td><strong>${col.name}</strong></td>
+                            <td><code>${col.type}</code></td>
+                            <td>${keyBadge || '<span style="color:#475569;">—</span>'}</td>
+                            <td>${nullBadge}</td>
+                            <td><code>${col.default}</code></td>
+                            <td>${col.desc}</td>
+                        </tr>
+                    `;
+                });
+
+                section.innerHTML = `
+                    <div class="table-header">
+                        <div>
+                            <h2>${tableName.toUpperCase()}</h2>
+                            <p>${details.description}</p>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 18%">Column Name</th>
+                                    <th style="width: 15%">Data Type</th>
+                                    <th style="width: 10%">Keys</th>
+                                    <th style="width: 12%">Nullable</th>
+                                    <th style="width: 15%">Default Value</th>
+                                    <th style="width: 30%">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                container.appendChild(section);
+            }
+        }
+
+        function downloadCSV() {
+            let csvContent = "Table,Column Name,Data Type,Key,Nullable,Default Value,Description\n";
+
+            for (const [tableName, details] of Object.entries(databaseSchema)) {
+                details.columns.forEach(col => {
+                    const row = [
+                        tableName.toUpperCase(),
+                        col.name,
+                        col.type,
+                        col.key || "—",
+                        col.nullable,
+                        col.default.replace(/,/g, ';'), // Replace commas to prevent CSV breaking
+                        col.desc.replace(/,/g, ';')
+                    ].map(val => `"${val}"`).join(",");
+                    csvContent += row + "\n";
+                });
+            }
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "almighty_driving_school_data_dictionary.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTables);
+    </script>
+</body>
+</html>
